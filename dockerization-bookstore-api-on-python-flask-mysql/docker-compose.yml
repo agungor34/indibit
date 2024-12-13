@@ -21,7 +21,11 @@ services:
     # ports:
     #   - "5002:5000"
     environment:
-      - DATABASE_URL=mysql://root:password@db/flask_app
+      - DATABASE_URL=mysql://root:Password@db/bookstore_db
+    # volumes:
+    #   - ./server/bookstore-api.py:/app
+    expose:
+      - 5000
     depends_on:
       - db
     networks:
@@ -47,11 +51,11 @@ services:
     networks:
       - backnet
     environment:
-      - MYSQL_DATABASE=flask_app
+      - MYSQL_DATABASE=bookstore_db
       - MYSQL_ROOT_PASSWORD_FILE=/run/secrets/db-password
     expose:
       - 3306
-      - 33060
+      # - 33060
 
 volumes:
   mysql_data:  # Volume tanımlaması burada

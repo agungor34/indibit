@@ -1,24 +1,28 @@
 # Import Flask modules
 from flask import Flask, jsonify, abort, request, make_response
+# from flaskext.mysql import MySQL
 from flask_mysqldb import MySQL
 # import pymysql
 
 # Create an object named app 
 app = Flask(__name__)
 
+if __name__ == "__main__":
+    app.run(debug=True, host='0.0.0.0')
+
 # Configure sqlite database
 app.config['MYSQL_DATABASE_HOST'] = 'db'
 app.config['MYSQL_DATABASE_USER'] = 'root'
-app.config['MYSQL_DATABASE_PASSWORD'] = '1234Qwer'
-app.config['MYSQL_DATABASE_DB'] = 'flask_app'
+app.config['MYSQL_DATABASE_PASSWORD'] = 'Password'
+app.config['MYSQL_DATABASE_DB'] = 'bookstore_db'
 app.config['MYSQL_DATABASE_PORT'] = 3306
 # mysql = pymysql
 
-mysql = MySQL
+mysql = MySQL()
 mysql.init_app(app)
 # connection = create_engine(f'mysql+pymysql://root:1234Qwer@db:3306/flask_app')
 
-# connection = mysql.connect()
+connection = mysql.connect()
 # host = 'db'  # Veritabanı konteyner adı veya sunucu adresi
 # user = 'root'  # Veritabanı kullanıcı adı
 # password = '1234Qwer'  # Veritabanı şifresi
@@ -36,6 +40,20 @@ mysql.init_app(app)
 
 connection.autocommit(True)
 cursor = connection.cursor()
+
+@app.teardown_appcontext
+def close_connection(exception):
+    """Veritabanı bağlantısını her istek sonrası kapat."""
+    if hasattr(g, 'mysql_db'):
+        g.mysql_db.close()
+
+
+def init_bookstore_db():
+    cursor.execute("CREATE DATABASE IF NOT EXISTS bookstore_db;")  # Veritabanı yaratma
+    cursor.execute("USE bookstore_db;")  # Şemaya geçiş
+    ...
+
+
 
 # Write a function named `init_bookstore_db` which initilazes the bookstore db
 # Create books table within sqlite db and populate with sample data
@@ -207,6 +225,6 @@ def bad_request(error):
 
 
 # Add a statement to run the Flask application which can be reached from any host on port 80.
-if __name__== '__main__':
-    init_bookstore_db()
-    app.run(host='0.0.0.0', port=80)
+# if __name__== '__main__':
+#     init_bookstore_db()
+#     app.run(host='0.0.0.0', port=80)
