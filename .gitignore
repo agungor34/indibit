@@ -1,0 +1,19 @@
+# Tek bir dosya
+secret.txt
+
+# Belirli bir türdeki dosyalar
+*.log  # Tüm .log uzantılı dosyalar
+*.tmp  # Tüm .tmp uzantılı dosyalar
+
+# Klasörleri hariç tutmak
+node_modules/  # Node.js bağımlılıkları
+build/         # Derleme çıktıları
+dist/          # Dağıtım dosyaları
+
+# Alt klasörlerdeki tüm .env dosyalarını hariç tut
+#**/*.env
+
+# Tüm log dosyalarını hariç tut, ancak error.log'u dahil et
+*.log
+!error.log
+
