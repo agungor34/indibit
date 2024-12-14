@@ -1,0 +1,6 @@
+/node_modules
+/src
+.dockerignore
+docker-compose.yml
+Dockerfile
+.eslintrc.cjs
