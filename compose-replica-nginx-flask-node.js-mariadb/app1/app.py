@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 # MySQL bağlantı ayarları
 DB_CONFIG = {
-    "host": "mysql_db",
+    "host": "maria_db",
     "user": "root",
     "password": "db-78n9n",
     "database": "flask_app",
