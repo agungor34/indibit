@@ -1,0 +1,9 @@
+#! nginx-D:\IT\Projects\indibit\indibit\nginx\nginx.conf-persistentVolumeClaim.yaml
+# Generated code, do not edit
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+    name: nginx-d--it-projects-indibit-indibit-nginx-nginx-conf
+    namespace: indibit
+spec:
+    storageClassName: "hostpath" # see docker/desktop-storage-provisioner

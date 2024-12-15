@@ -1,0 +1,45 @@
+#! app1-deployment.yaml
+# Generated code, do not edit
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: app1
+    namespace: indibit
+    labels:
+        com.docker.compose.project: indibit
+        com.docker.compose.service: app1
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            com.docker.compose.project: indibit
+            com.docker.compose.service: app1
+    strategy:
+        type: Recreate
+    template:
+        metadata:
+            labels:
+                com.docker.compose.project: indibit
+                com.docker.compose.service: app1
+                com.docker.compose.network.backnet: "true"
+                com.docker.compose.network.frontnet: "true"
+        spec:
+            containers:
+                - name: app1
+                  image: indibit-app1
+                  imagePullPolicy: IfNotPresent
+                  env:
+                    - name: DATABASE_URL
+                      value: "mysql://root:password@db/flask_app"
+                  volumeMounts:
+                    - name: run-secrets-db-password
+                      mountPath: /run/secrets/db-password
+                      subPath: db-password
+                      readOnly: true
+            volumes:
+                - name: run-secrets-db-password
+                  secret:
+                    secretName: db-password
+                    items:
+                        - key: db-password
+                          path: db-password

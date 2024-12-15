@@ -1,0 +1,11 @@
+#! kustomization.yaml
+# Generated code, do not edit
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+    - ../../base
+patches:
+    - path: db-D:\IT\Projects\indibit\indibit\db\init.sql-persistentVolumeClaim.yaml
+    - path: db-mysql_data-persistentVolumeClaim.yaml
+    - path: nginx-D:\IT\Projects\indibit\indibit\nginx\nginx.conf-persistentVolumeClaim.yaml
+    - path: nginx-service.yaml

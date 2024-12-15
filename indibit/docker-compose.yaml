@@ -1,4 +1,7 @@
+name: MyAp
+
 services:
+
   nginx:
     image: nginx:latest
     container_name: nginx
@@ -13,35 +16,32 @@ services:
       - frontnet
 
   app1:
+    image: mycon
     deploy:
-      replicas: 5
+      replicas: 2
+    restart: always
     build:
       context: ./app1
     # container_name: flask_app1
     # ports:
     #   - "5006-5010"
-    environment:
-      - DATABASE_URL=mysql://root:password@db/flask_app
-    secrets:
-      - db-password
-    depends_on:
-      - db
-      # db:
-      #   condition: service_healthy
+    environment: ["DATABASE_URL=maria_db://root:password@db/flask_app"]
+    secrets: ["db-password"]
+    depends_on: ["db"]
     networks:
       - backnet
       - frontnet ####
 
   db:
     image: mariadb:latest
-    container_name: mysql_db
-    #command: '--default-authentication-plugin=mysql_native_password'
-    # restart: always
-    # healthcheck:
-    #   test: ['CMD-SHELL', 'mysqladmin ping -h 127.0.0.1 --password="$$(cat /run/secrets/db-password)" --silent']
-    #   interval: 3s
-    #   retries: 5
-    #   start_period: 30s
+    container_name: maria_db
+    command: '--default-authentication-plugin=mysql_native_password'
+    restart: always
+    healthcheck:
+      test: ['CMD-SHELL', 'mariadb-admin ping -h 127.0.0.1 --password="$$(cat /run/secrets/db-password)" --silent']
+      interval: 3s
+      retries: 5
+      start_period: 30s
     secrets:
       - db-password
     volumes:

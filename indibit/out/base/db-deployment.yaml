@@ -1,0 +1,59 @@
+#! db-deployment.yaml
+# Generated code, do not edit
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: db
+    namespace: indibit
+    labels:
+        com.docker.compose.project: indibit
+        com.docker.compose.service: db
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            com.docker.compose.project: indibit
+            com.docker.compose.service: db
+    strategy:
+        type: Recreate
+    template:
+        metadata:
+            labels:
+                com.docker.compose.project: indibit
+                com.docker.compose.service: db
+                com.docker.compose.network.backnet: "true"
+        spec:
+            containers:
+                - name: mysql-db
+                  image: mariadb:latest
+                  imagePullPolicy: IfNotPresent
+                  env:
+                    - name: MYSQL_DATABASE
+                      value: "flask_app"
+                    - name: MYSQL_ROOT_PASSWORD_FILE
+                      value: "/run/secrets/db-password"
+                  ports:
+                    - name: db-3306
+                      containerPort: 3306
+                  volumeMounts:
+                    - name: docker-entrypoint-initdb-d-init-sql
+                      mountPath: /docker-entrypoint-initdb.d/init.sql
+                    - name: var-lib-mysql
+                      mountPath: /var/lib/mysql
+                    - name: run-secrets-db-password
+                      mountPath: /run/secrets/db-password
+                      subPath: db-password
+                      readOnly: true
+            volumes:
+                - name: run-secrets-db-password
+                  secret:
+                    secretName: db-password
+                    items:
+                        - key: db-password
+                          path: db-password
+                - name: docker-entrypoint-initdb-d-init-sql
+                  hostPath:
+                    path: D:\IT\Projects\indibit\indibit\db\init.sql
+                - name: var-lib-mysql
+                  persistentVolumeClaim:
+                    claimName: db-mysql-data

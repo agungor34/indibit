@@ -1,0 +1,9 @@
+#! db-D:\IT\Projects\indibit\indibit\db\init.sql-persistentVolumeClaim.yaml
+# Generated code, do not edit
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+    name: db-d--it-projects-indibit-indibit-db-init-sql
+    namespace: indibit
+spec:
+    storageClassName: "hostpath" # see docker/desktop-storage-provisioner

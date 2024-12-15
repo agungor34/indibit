@@ -1,0 +1,8 @@
+#! 0-indibit-namespace.yaml
+# Generated code, do not edit
+apiVersion: v1
+kind: Namespace
+metadata:
+    name: indibit
+    labels:
+        com.docker.compose.project: indibit

@@ -1,0 +1,18 @@
+#! kustomization.yaml
+# Generated code, do not edit
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+    - 0-indibit-namespace.yaml
+    - app1-deployment.yaml
+    - backnet-network-policy.yaml
+    - db-D:\IT\Projects\indibit\indibit\db\init.sql-persistentVolumeClaim.yaml
+    - db-deployment.yaml
+    - db-expose.yaml
+    - db-mysql_data-persistentVolumeClaim.yaml
+    - db-password-secret.yaml
+    - frontnet-network-policy.yaml
+    - nginx-D:\IT\Projects\indibit\indibit\nginx\nginx.conf-persistentVolumeClaim.yaml
+    - nginx-deployment.yaml
+    - nginx-expose.yaml
+    - nginx-service.yaml

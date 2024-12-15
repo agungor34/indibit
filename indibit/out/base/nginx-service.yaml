@@ -1,0 +1,21 @@
+# check if there is at least one published port
+
+#! nginx-service.yaml
+# Generated code, do not edit
+apiVersion: v1
+kind: Service
+metadata:
+    name: nginx-published
+    namespace: indibit
+    labels:
+        com.docker.compose.project: indibit
+        com.docker.compose.service: nginx
+spec:
+    selector:
+        com.docker.compose.project: indibit
+        com.docker.compose.service: nginx
+    ports:
+        - name: nginx-80
+          port: 80
+          protocol: TCP
+          targetPort: nginx-80
