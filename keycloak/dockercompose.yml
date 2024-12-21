@@ -1,0 +1,80 @@
+name: k_aufgabe
+
+services:
+  keycl:
+    build:
+      context: keycl
+ #   image: quay.io/keycloak/keycloak:latest
+    secrets:
+      - db-password
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - KC_DB=postgres
+      - KC_DB_URL=jdbc:postgresql://db:5432/keycloak
+      - KC_DB_USERNAME=keycloak
+      - KC_DB_PASSWORD=Qwerasdf
+#      - KC_DB_PASSWORD="$$(cat /run/secrets/db-password)"
+      - KC_HOSTNAME=localhost
+      - KC_BOOTSTRAP_ADMIN_USERNAME=admin
+      - KC_BOOTSTRAP_ADMIN_PASSWORD=admin
+    ports:
+      - "8080:8080"
+    command: start-dev
+
+  #  volumes:
+      # MariaDB JDBC sürücüsünü Keycloak konteynerına kopyalayın
+   #   - ./mariadb-java-client-x.x.x.jar:/opt/jboss/keycloak/standalone/lib/mariadb-java-client.jar
+    networks:
+      - frontnet
+      - backnet
+
+  db:
+    image: postgres
+    container_name: postgres
+    restart: always
+    user: postgres
+    secrets:
+      - db-password
+    volumes:
+      - db-data-postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=keycloak
+      - POSTGRES_USER=keycloak
+      - POSTGRES_PASSWORD=Qwerasdf
+    expose:
+      - 5432
+    healthcheck:
+      test: [ "CMD", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - backnet
+
+  proxy:
+    image: nginx
+    container_name: nginx
+    volumes:
+      - type: bind
+        source: ./nginx/nginx.conf
+        target: /etc/nginx/conf.d/default.conf
+        read_only: true
+    ports:
+      - 80:80
+    depends_on: 
+      - keycl
+    networks:
+      - frontnet
+
+volumes:
+  db-data-postgres:
+
+secrets:
+  db-password:
+    file: db/password.txt
+
+networks:
+  frontnet:
+  backnet:
